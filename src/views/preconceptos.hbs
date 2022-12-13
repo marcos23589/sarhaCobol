@@ -1,0 +1,50 @@
+<form action="/preconceptos" method="post">
+  <div class="container-fluid-sm p-5">
+    <div class="row align-items-start">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            {{#each res1}}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol" checked>
+              <label class="form-check-label" for="{{cobol}}">
+                {{sarha}} ({{cobol}}) - {{denominacion}}
+              </label>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            {{#each res2}}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol" checked>
+              <label class="form-check-label" for="{{cobol}}">
+                {{sarha}} ({{cobol}}) - {{denominacion}}
+              </label>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            {{#each res3}}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol" checked>
+              <label class="form-check-label" for="{{cobol}}">
+                {{sarha}} ({{cobol}}) - {{denominacion}}
+              </label>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-grid gap-2 col-3 mx-auto pt-3">
+      <button class="btn btn-primary" type="submit">Enviar</button>
+    </div>
+</form>

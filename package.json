@@ -1,0 +1,36 @@
+{
+  "name": "sarhacobol",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000p\u0000r\u0000e\u0000c\u0000o\u0000n\u0000c\u0000e\u0000p\u0000t\u0000o\u0000s\u0000S\u0000a\u0000r\u0000h\u0000a\u0000C\u0000o\u0000b\u0000o\u0000l\u0000\r\u0000 \u0000",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "excel": "nodemon ./src/helpers/excel.js",
+    "conceptos": "nodemon ./src/helpers/conceptos.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcos23589/sarhaCobol.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcos23589/sarhaCobol/issues"
+  },
+  "homepage": "https://github.com/marcos23589/sarhaCobol#readme",
+  "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "handlebars": "^4.7.7",
+    "mongoose": "^6.7.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
