@@ -11,8 +11,7 @@ exports.acerca = (req, res) => {
     return res.render("about")
 }
 
-exports.getLiquidacion =   (req, res) => {
-    
+exports.getLiquidacion =   (req, res) => {    
     return res.render("liquidacion")
 }
 
@@ -30,24 +29,17 @@ exports.getPreconceptos = async (req, res) => {
             res2.push(resultado[index])
         }else
         res3.push(resultado[index])        
-    }   
-     
+    }
     return res.render("preconceptos", {res1, res2, res3})
 }
 
 
 exports.postPreconceptos = async (req, res) => {
-    const cobol = req.body
-    console.log(cobol)
-    let salida
     
-    for(const [value] of Object.entries(cobol)){   
-        salida = await liquidacion.find({"CODIGO": value})                
-      }
-    
-    let archivo = Object.values(salida)
-    for (let i = 0; i < archivo.length; i++) {
+    const preconceptos = req.body.cobol
+    let archivo = await liquidacion.find({ "CODIGO" : preconceptos})
 
+    for (let i = 0; i < archivo.length; i++) {
         let importe = Math.ceil(archivo[i].IMPORTE * 100);
         let cuil = archivo[i].CUIL;
         let auxSarha = await Concepto.find({"cobol": archivo[i].CODIGO})
@@ -59,12 +51,10 @@ exports.postPreconceptos = async (req, res) => {
         if(aux){
           cantidad = Math.ceil(importe / (aux.MONTO*100));                   
         }
-        
-        filtro(sarha, importe, cuil, cantidad, denominacion)
-           
+                
+        filtro(sarha, importe, cuil, cantidad, denominacion)           
     }  
-    
-
+ 
     return res.redirect("preconceptos")
 }
 

@@ -10,7 +10,7 @@ const liquidacionSchema = new Schema({
         required: true
     },
     CODIGO: {
-        type: Number,
+        type: String,
         required: true
     },
     IMPORTE: {
@@ -19,7 +19,7 @@ const liquidacionSchema = new Schema({
     }
 })
 
-const modeloLiquidacion = model("Liquidacion", liquidacionSchema);
+const modeloLiquidacion = model("liquidacions", liquidacionSchema);
 
 
 module.exports = modeloLiquidacion
