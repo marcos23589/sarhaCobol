@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router()
 const path = require('path')
-const destino = path.join(__dirname, "../public/upload");
+const destino = path.join(__dirname, "../files/upload");
 const multer = require("multer");
 const xlsx = require("xlsx");
 const fs = require('fs')
