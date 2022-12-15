@@ -1,8 +1,12 @@
 const path = require("path");
 const fs = require('fs')
 const { fechaDesde, fechaHasta, periodoDesde } = require("../helpers/fecha");
-const salidasTxt = path.join(__dirname, "../public/salidas-txt");
+const salidasTxt = path.join(__dirname, "../files/salidas-txt");
 
+//SE CREA EL DIRECTORIO DONDE SE GUARDAN LAS SALIDAS
+fs.mkdir(salidasTxt, { recursive: true }, (err) => {
+  if (err) throw err;
+});
 
 const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
 

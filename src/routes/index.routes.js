@@ -15,6 +15,12 @@ const {
     postPreconceptos
 } = require("../controllers/pages.controller");
 
+//SE CREA EL DIRECTORIO DONDE SE GUARDAN 
+//LAS PLANILLAS DE MANERA TEMPORAL
+fs.mkdir(destino, { recursive: true }, (err) => {
+  if (err) throw err;
+});
+
 let nombre = "";
 let tiempo = Date.now();
 const jDatos = [];
