@@ -4,10 +4,8 @@ const xlsx = require("xlsx");
 const multer = require("multer");
 const { Router } = require("express");
 const router = Router()
-
 let nombre = "";
 let tiempo = Date.now();
-let jDatos = [];
 
 // SE SUBE EL ARCHIVO EXCEL
 const guardado = multer.diskStorage({
@@ -26,8 +24,6 @@ const guardado = multer.diskStorage({
     }).array("archivo")
   );
 
-
-  
   //FILTRO CON LOS CUIT DE LOS ANEXOS QUE ESTÁN CARGADOS EN SARHA
   const cuits = [
     30710660839, 30716837250, 30711853738, 30716110326, 33716718439,
@@ -44,17 +40,13 @@ const guardado = multer.diskStorage({
  //SE CREA UNA VARIABLE PARA GUARDAR UN JSON CON LOS DATOS DE LA PESTAÑA 1
  let datos = xlsx.utils.sheet_to_json(excelToJson.Sheets[nombreHoja[0]]);
 
-
     for (let i = 0; i < datos.length; i++) {
         //SE FILTRA EL JSON DE ACUERDO A LOS ANEXOS
         if (cuits.includes(datos[i].CUIT)) {
           jDatos.push({
-            ...datos[i],
-            //Fecha: new Date((dato.Fecha - (25567 + 2)) * 86400 * 1000)
+            ...datos[i],            
           });
         }
       } 
     
-
-
 module.exports = excel

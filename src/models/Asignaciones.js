@@ -19,6 +19,7 @@ const asignacionSchema = mongoose.Schema({
     }
 })
 
+// EN model SE USA EL NOMBRE DE LA COLECCION EN LA BBDD!
 const modeloAsignacion = mongoose.model("asignaciones", asignacionSchema)
 
 

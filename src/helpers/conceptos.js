@@ -38,8 +38,8 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
     cantidad.toFixed().toString().padStart(10, "0").padEnd(14, "0") +
     importe.toString().padStart(12, "0");
 
-  //SE AGREGA AL FINAL DEL STRING UN RETORNO DE CARRO, PARA QUE EL PRÓXIMO
-  //SE ESCRIBA DEBAJO DE ÉSTE
+  //SE AGREGA UN RETORNO DE CARRO AL FINAL DEL STRING, 
+  //PARA QUE LA PRÓXIMA LÍNEA SE ESCRIBA DEBAJO DE ÉSTA
   stringSalida += "\n";
 
   //CREA EL ARCHIVO Y LO VA ACTUALIZANDO
@@ -56,5 +56,3 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
 };
 
 module.exports = filtro
-
-

@@ -18,7 +18,7 @@ const liquidacionSchema = new Schema({
         required: true
     }
 })
-
+// EN model SE USA EL NOMBRE DE LA COLECCION EN LA BBDD!
 const modeloLiquidacion = model("liquidacions", liquidacionSchema);
 
 

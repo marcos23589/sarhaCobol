@@ -9,7 +9,6 @@ const liquidacion = require("../models/Liquidacion")
 
 const {
     home,
-    acerca,
     getLiquidacion,
     getPreconceptos,
     postPreconceptos
@@ -25,7 +24,8 @@ let nombre = "";
 let tiempo = Date.now();
 const jDatos = [];
 
-// SE SUBE EL ARCHIVO EXCEL
+// SE SUBE EL ARCHIVO EXCEL 
+// Y SE LE DA UN NOMBRE ALEATORIO
 const guardado = multer.diskStorage({
     filename: (req, file, cb) => {
       nombre = tiempo + "-" + file.originalname;
@@ -42,11 +42,13 @@ router.use(
     }).array("archivo")
   );  
 
+// RUTAS
 router.get('/', home)
 router.get('/preconceptos', getPreconceptos)
 router.post('/preconceptos', postPreconceptos)
 router.get('/liquidacion', getLiquidacion)
 
+//CUANDO SE CARGA LA LIQUIDACION
 router.post('/liquidacion', async (req, res) => {
   
   //FILTRO CON LOS CUIT DE LOS ANEXOS QUE ESTÁN CARGADOS EN SARHA
@@ -56,7 +58,7 @@ router.post('/liquidacion', async (req, res) => {
     30707677879, 30673656524,
   ];
 
-  //LEVANTA EL EXCEL PARA QUE LEVANTE LOS DATOS
+  //LEVANTA EL EXCEL GUARDADO PARA OBTENER LOS DATOS
   let excelToJson = xlsx.readFile(`${destino}/${nombre}`);
 
   //SE CREA UNA VARIABLE QUE GUARDA UN JSON CON LOS NOMBRES DE LAS PESTAÑAS
@@ -67,7 +69,7 @@ router.post('/liquidacion', async (req, res) => {
   
   for (let i = 0; i < datos.length; i++) {
 
-    //SE FILTRA EL JSON DE ACUERDO A LOS ANEXOS
+    //SE FILTRA EL JSON DE ACUERDO AL CUIT DE LOS ANEXOS
     if (cuits.includes(datos[i].CUIT)) {
         const {CUIT, CUIL, CODIGO, IMPORTE } = datos[i]
       jDatos.push({
@@ -88,16 +90,15 @@ router.post('/liquidacion', async (req, res) => {
    }
   });
 
-  //SE BORRA EL ARCHIVO SUBIDO
+  //SE BORRA EL ARCHIVO EXCEL SUBIDO
   try {
     fs.unlinkSync(`${destino}/${nombre}`)
-    console.log('Archivo eliminado!')
+    console.log('Archivo excel guardado en BBDD!')
   } catch (error) {
     console.error('Algo pasó borrando el archivo! ->', error)
   }
   
-  return res.redirect("liquidacion")
+  return res.redirect("preconceptos")
 })
-
-    
+  
 module.exports = router
