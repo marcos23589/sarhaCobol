@@ -1,4 +1,4 @@
-<form action="/preconceptos" method="post">
+<form action="/preconceptos" method="post" id="formElement">
   <div class="container-fluid-sm p-5">
     <div class="row align-items-start">
       <div class="col">
@@ -40,6 +40,10 @@
               </label>
             </div>
             {{/each}}
+            <h5>
+              <a href="#" id="marcarTodo">Marcar todo</a> |
+              <a href="#" id="desmarcarTodo">Desmarcar todo</a>
+            </h5>
           </div>
         </div>
       </div>
@@ -48,3 +52,28 @@
       <button class="btn btn-primary" type="submit">Enviar</button>
     </div>
 </form>
+
+
+{{!-- SCRIPT PARA MARCAR/DESMARCAR TODOS LOS CONCEPTOS --}}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('marcarTodo').addEventListener('click', function (e) {
+      e.preventDefault();
+      checkAll();
+    });
+    document.getElementById('desmarcarTodo').addEventListener('click', function (e) {
+      e.preventDefault();
+      uncheckAll();
+    });
+    function checkAll() {
+      document.querySelectorAll('#formElement input[type=checkbox]').forEach(function (checkElement) {
+        checkElement.checked = true;
+      });
+    }
+    function uncheckAll() {
+      document.querySelectorAll('#formElement input[type=checkbox]').forEach(function (checkElement) {
+        checkElement.checked = false;
+      });
+    }
+  })         
+</script>

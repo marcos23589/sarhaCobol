@@ -43,7 +43,6 @@ router.use(
   );  
 
 router.get('/', home)
-router.get('/about', acerca)
 router.get('/preconceptos', getPreconceptos)
 router.post('/preconceptos', postPreconceptos)
 router.get('/liquidacion', getLiquidacion)

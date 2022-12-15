@@ -4,15 +4,11 @@ const filtro = require('../helpers/conceptos')
 const Asignaciones = require('../models/Asignaciones')
 
 exports.home = (req, res) => {
-    return res.render("home")
-}
-
-exports.acerca = (req, res) => {
-    return res.render("about")
+    return res.render("home", {titulo: "Sarha-Cobol"})
 }
 
 exports.getLiquidacion =   (req, res) => {    
-    return res.render("liquidacion")
+    return res.render("liquidacion", {titulo: "Liquidacion"})
 }
 
 exports.getPreconceptos = async (req, res) => {
@@ -30,7 +26,7 @@ exports.getPreconceptos = async (req, res) => {
         }else
         res3.push(resultado[index])        
     }
-    return res.render("preconceptos", {res1, res2, res3})
+    return res.render("preconceptos", {res1, res2, res3, titulo: "Preconceptos"})
 }
 
 
