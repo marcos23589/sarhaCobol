@@ -35,7 +35,7 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
     periodoDesde +
     reintegro +
     fechaHasta +
-    cantidad.toFixed().toString().padStart(10, "0").padEnd(14, "0") +
+    cantidad.toFixed().toString().padStart(8, "0").padEnd(14, "0") +
     importe.toString().padStart(12, "0");
 
   //SE AGREGA UN RETORNO DE CARRO AL FINAL DEL STRING, 

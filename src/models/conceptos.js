@@ -1,8 +1,9 @@
 const { Schema, model } = require("mongoose")
 
 const conceptoSchema = new Schema({
-    sarha: Number,
     cobol: Number,
+    sarha: Number,
+    subsarha: Number,
     denominacion: String 
 })
 
