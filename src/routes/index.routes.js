@@ -79,10 +79,10 @@ router.post('/liquidacion', async (req, res) => {
   }
 
   //SE LIMPIA LA BBDD
-  await liquidacion.deleteMany()
+  liquidacion.deleteMany()
 
   //SE GUARDA LA LIQUIDACION EN LA BBDD
-  await jDatos.forEach(element => {
+  jDatos.forEach(element => {
     try {
      liquidacion.insertMany(element)
    } catch (error) {
