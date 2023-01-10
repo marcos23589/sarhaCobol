@@ -45,12 +45,14 @@ exports.postPreconceptos = async (req, res) => {
         let aux =  await Asignaciones.findOne({"SARHA": sarha})
         
         if(aux){
-          cantidad = Math.ceil(importe / (aux.MONTO*100));                   
+
+          //redondea al entero más cercano
+          cantidad = Math.round(importe / (aux.MONTO*100));                           
         }
                 
-        filtro(sarha, importe, cuil, cantidad, denominacion)           
+        filtro(sarha, importe, cuil, cantidad, denominacion)
     }  
- 
+    
     return res.redirect("preconceptos")
 }
 

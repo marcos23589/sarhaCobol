@@ -18,7 +18,6 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
   if (cantidad == -1) {
     cantidad = 1;
   } else {
-
     //EN CASO DE ASIGNACION, NO VA IMPORTE
     importe = 0;
   }
@@ -35,7 +34,7 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
     periodoDesde +
     reintegro +
     fechaHasta +
-    cantidad.toFixed().toString().padStart(8, "0").padEnd(14, "0") +
+    cantidad.toString().padStart(8, "0").padEnd(14, "0") +
     importe.toString().padStart(12, "0");
 
   //SE AGREGA UN RETORNO DE CARRO AL FINAL DEL STRING, 
