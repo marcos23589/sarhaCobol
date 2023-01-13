@@ -12,12 +12,18 @@ exports.getLiquidacion =   (req, res) => {
 }
 
 exports.getPreconceptos = async (req, res) => {
+
+    //se obtiene la cantidad de registros (liq. vertical)
+    let cantidad = await liquidacion.countDocuments()
+
+    //se obtienen los conceptos a seleccionar
     let resultado = await Concepto.find()
     let res1 = []
     let res2 = []
     let res3 = []
     const tamano = resultado.length
     
+    //se separan los conceptos en 3 arrays para visualizar en 3 columnas
     for (let index = 0; index < resultado.length; index++) {
         if (index < (tamano*1/3)) {
             res1.push(resultado[index])
@@ -26,7 +32,7 @@ exports.getPreconceptos = async (req, res) => {
         }else
         res3.push(resultado[index])        
     }
-    return res.render("preconceptos", {res1, res2, res3, titulo: "Preconceptos"})
+    return res.render("preconceptos", {res1, res2, res3, titulo: "Preconceptos", cantidad})
 }
 
 

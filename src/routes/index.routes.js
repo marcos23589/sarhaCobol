@@ -50,7 +50,10 @@ router.get('/liquidacion', getLiquidacion)
 
 //CUANDO SE CARGA LA LIQUIDACION
 router.post('/liquidacion', async (req, res) => {
-  
+
+  //SE LIMPIA LA BBDD
+  await liquidacion.deleteMany()
+
   //FILTRO CON LOS CUIT DE LOS ANEXOS QUE ESTÁN CARGADOS EN SARHA
   const cuits = [
     30710660839, 30716837250, 30711853738, 30716110326, 33716718439,
@@ -78,8 +81,7 @@ router.post('/liquidacion', async (req, res) => {
     }    
   }
 
-  //SE LIMPIA LA BBDD
-  liquidacion.deleteMany()
+
 
   //SE GUARDA LA LIQUIDACION EN LA BBDD
   jDatos.forEach(element => {
@@ -90,6 +92,8 @@ router.post('/liquidacion', async (req, res) => {
    }
   });
 
+  console.log("DOCUMENTOS INGRESADOS ->", liquidacion.length)
+
   //SE BORRA EL ARCHIVO EXCEL SUBIDO
   try {
     fs.unlinkSync(`${destino}/${nombre}`)
@@ -97,8 +101,15 @@ router.post('/liquidacion', async (req, res) => {
   } catch (error) {
     console.error('Algo pasó borrando el archivo! ->', error)
   }
+
+  
   
   return res.redirect("preconceptos")
 })
   
 module.exports = router
+
+//how many documents deleted in a collection in mongoose?
+
+
+
