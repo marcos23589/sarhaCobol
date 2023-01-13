@@ -101,15 +101,12 @@ router.post('/liquidacion', async (req, res) => {
   } catch (error) {
     console.error('Algo pasó borrando el archivo! ->', error)
   }
-
   
   
   return res.redirect("preconceptos")
 })
   
 module.exports = router
-
-//how many documents deleted in a collection in mongoose?
 
 
 
