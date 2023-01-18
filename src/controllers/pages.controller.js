@@ -48,17 +48,32 @@ exports.postPreconceptos = async (req, res) => {
         let sarha = auxSarha[0].sarha
         let denominacion = auxSarha[0].denominacion
         let cantidad = -1;
+        let subsarha = auxSarha[0].subsarha
         let aux =  await Asignaciones.findOne({"SARHA": sarha})
         
-        if(aux){
+        /* let resultado851 = []
 
+        for (let index = 0; index < archivo.length; index++) {
+            if(archivo[index].CODIGO == '280' || archivo[index].CODIGO == '250'){
+                resultado851.push({cuil: archivo[index].CUIL,
+                                  acumulado: archivo[index].IMPORTE}) 
+            }            
+        }
+
+        console.log(resultado851) */        
+
+
+        if(aux){
+            
           //redondea al entero más cercano
           cantidad = Math.round(importe / (aux.MONTO*100));                           
         }
-                
-        filtro(sarha, importe, cuil, cantidad, denominacion)
+        
+        filtro(sarha, importe, cuil, cantidad, denominacion, subsarha)
     }  
     
     return res.redirect("preconceptos")
 }
+
+
 

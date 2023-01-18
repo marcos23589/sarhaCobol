@@ -11,11 +11,25 @@ fs.mkdir(salidasTxt, { recursive: true }, (err) => {
   if (err) throw err;
 });
 
-const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
+const filtro = (CODIGO, importe, cuil, cantidad, concepto, subsarha) => {
+  
+  let reintegro = "";
 
-  //VALORES FIJOS
-  let subconcepto = "1";
-  let reintegro = "1";
+  switch (CODIGO) {
+    case 851: if(subsarha == 1 || subsarha == 2){reintegro = "8"}
+      break;
+    case 852: if(subsarha == 1 || subsarha == 2 || subsarha == 3) 
+                  {reintegro = "8"} 
+                  else if(subsarha == 4){reintegro = "9"}
+      break;
+    case 855: if(subsarha == 1){reintegro = "9"}
+      break;
+    case 320: if(subsarha == 2 || subsarha == 3){reintegro = "8"}
+      break;
+    default:
+        reintegro = "1";
+      break;
+  }  
 
   //Si cantidad == -1, NO ES ASIGNACION
   if (cantidad == -1) {
@@ -31,6 +45,7 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
   }
 
   
+  
   //SE CREA UN STRING QUE LUEGO SE ESCRIBE EN EL ARCHIVO
   let stringSalida = "";
     stringSalida +=
@@ -38,7 +53,7 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto) => {
 
     //RELLENA LOS CAMPOS AL PRINCIPIO
     CODIGO.toString().padStart(4, "0") +
-    subconcepto.padStart(4, "0") +
+    subsarha.toString().padStart(4, "0") +
     desde +
     periodoDesde +
     reintegro +
