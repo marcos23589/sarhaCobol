@@ -11,10 +11,11 @@ fs.mkdir(salidasTxt, { recursive: true }, (err) => {
   if (err) throw err;
 });
 
-const filtro = (CODIGO, importe, cuil, cantidad, concepto, subsarha) => {
+const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
   
   let reintegro = "";
 
+  //SE DEFINEN LOS REINTEGROS PARA LOS VALORES DE IMPORTE
   switch (CODIGO) {
     case 851: if(subsarha == 1 || subsarha == 2){reintegro = "8"}
       break;
@@ -43,8 +44,6 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto, subsarha) => {
     desde = 31012023
     hasta = 31012023
   }
-
-  
   
   //SE CREA UN STRING QUE LUEGO SE ESCRIBE EN EL ARCHIVO
   let stringSalida = "";
@@ -68,7 +67,7 @@ const filtro = (CODIGO, importe, cuil, cantidad, concepto, subsarha) => {
   //CREA EL ARCHIVO Y LO VA ACTUALIZANDO
   //SI EXISTE, LO SOBREESCRIBE!
   fs.appendFile(
-    `${salidasTxt}/${CODIGO}-${concepto}.txt`,
+    `${salidasTxt}/${CODIGO}-${denominacion}.txt`,
     stringSalida,
     (err) => {
       if (err) {

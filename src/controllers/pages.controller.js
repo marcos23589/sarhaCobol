@@ -2,7 +2,7 @@ const Concepto = require('../models/conceptos')
 const liquidacion = require('../models/Liquidacion')
 const filtro = require('../helpers/conceptos')
 const Asignaciones = require('../models/Asignaciones')
-const {filtro851, filtro852} = require('../helpers/filtros')
+const sumaCodigos = require('../helpers/filtros')
 
 exports.home = (req, res) => {
     return res.render("home", {titulo: "Sarha-Cobol"})
@@ -43,30 +43,28 @@ exports.postPreconceptos = async (req, res) => {
     //SE OBTIENEN LOS CONCEPTOS A GENERAR TXTS
     let archivo = await liquidacion.find({ "CODIGO" : preconceptos})
     
-    //SUMA CODIGOS 250-280 (COBOL)
-    filtro851(archivo)
-
-    //SUMA CODIGOS 930-933 (COBOL)
-    filtro852(archivo)
-       
+    //SUMA CODIGOS 250-280 y 930-933(COBOL)    
+    sumaCodigos(archivo)
 
     for (let i = 0; i < archivo.length; i++) {
-        let importe = Math.ceil(archivo[i].IMPORTE * 100);
-        let cuil = archivo[i].CUIL;
+        let importe = Math.ceil(archivo[i].IMPORTE * 100);        
         let auxSarha = await Concepto.find({"cobol": archivo[i].CODIGO})
-        let sarha = auxSarha[0].sarha
-        let denominacion = auxSarha[0].denominacion
         let cantidad = -1;
-        let subsarha = auxSarha[0].subsarha
-        let aux =  await Asignaciones.findOne({"SARHA": sarha})
+        let aux =  await Asignaciones.findOne({"SARHA": auxSarha[0].sarha})        
         
-        if(aux){
-            
+        if(aux){            
           //redondea al entero más cercano
           cantidad = Math.round(importe / (aux.MONTO*100));                           
         }
         
-        filtro(sarha, importe, cuil, cantidad, denominacion, subsarha)
+        //FILTRO PARA CREAR LOS ARCHIVOS
+        filtro(
+            auxSarha[0].sarha,
+            importe, 
+            archivo[i].CUIL, 
+            cantidad, 
+            auxSarha[0].denominacion,
+            auxSarha[0].subsarha)
     }  
     
     return res.redirect("preconceptos")
