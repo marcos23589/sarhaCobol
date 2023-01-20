@@ -1,15 +1,15 @@
 //SE FILTRAN LOS DOCUMENTOS DE LA BBDD POR CODIGO COBOL
-function filtro851(archivo){
-    let arreglo851 = archivo.filter(element => 
-        element.CODIGO == '250'||element.CODIGO == '280')
-    sumaCuil(arreglo851)
-}
+const sumaCodigos = (archivo) => {  
+  let arreglo851 = archivo.filter(
+    (element) => element.CODIGO == "250" || element.CODIGO == "280"
+  );
+  sumaCuil(arreglo851);
 
-function filtro852(archivo){
-    let arreglo852 = archivo.filter(element => 
-        element.CODIGO == '930'||element.CODIGO == '933')
-        sumaCuil(arreglo852)
-}       
+  let arreglo852 = archivo.filter(
+    (element) => element.CODIGO == "930" || element.CODIGO == "933"
+  );
+  sumaCuil(arreglo852);
+}
 
 //SE SUMAN LOS IMPORTES CUYOS CUILES SON IGUALES
 function sumaCuil(arreglo) {
@@ -26,7 +26,4 @@ function sumaCuil(arreglo) {
     }      
   }  
         
-module.exports = {
-    filtro851,
-    filtro852
-}
+module.exports = sumaCodigos
