@@ -2,6 +2,7 @@ const Concepto = require('../models/conceptos')
 const liquidacion = require('../models/Liquidacion')
 const filtro = require('../helpers/conceptos')
 const Asignaciones = require('../models/Asignaciones')
+const {filtro851, filtro852} = require('../helpers/filtros')
 
 exports.home = (req, res) => {
     return res.render("home", {titulo: "Sarha-Cobol"})
@@ -35,50 +36,19 @@ exports.getPreconceptos = async (req, res) => {
     return res.render("preconceptos", {res1, res2, res3, titulo: "Preconceptos", cantidad})
 }
 
-
 exports.postPreconceptos = async (req, res) => {
     
     const preconceptos = req.body.cobol
+
+    //SE OBTIENEN LOS CONCEPTOS A GENERAR TXTS
     let archivo = await liquidacion.find({ "CODIGO" : preconceptos})
-
-    /* let resultado851 = []
-
-        for (let index = 0; index < archivo.length; index++) {
-            if(archivo[index].CODIGO == '280' || archivo[index].CODIGO == '250'){
-                resultado851.push({cuil: archivo[index].CUIL,
-                                  acumulado: archivo[index].IMPORTE}) 
-            }            
-        }   
     
-        let resultado = new Map();
+    //SUMA CODIGOS 250-280 (COBOL)
+    filtro851(archivo)
 
-        resultado851.forEach( (resultado851) => {
-
-            let temp = 0;
-
-            if (resultado.has((resultado851.cuil).toString())) {
-                temp = resultado.get((resultado851.cuil).toString()) + resultado851.acumulado;
-            } else {
-                temp = resultado851.acumulado;
-            }
-
-            resultado.set((resultado851.cuil), temp);
-            console.log(temp);
-            }
-        ); */
-
-    const busqueda = archivo.reduce((acc, persona) => {
-      acc[persona.CUIL] = ++acc[persona.CUIL] || 0;
-      return acc;
-    }, {});
-
-    const duplicados = archivo.filter((persona) => {
-      return busqueda[persona.CUIL];
-    });
-    console.log(duplicados)
-
-    
-    
+    //SUMA CODIGOS 930-933 (COBOL)
+    filtro852(archivo)
+       
 
     for (let i = 0; i < archivo.length; i++) {
         let importe = Math.ceil(archivo[i].IMPORTE * 100);
