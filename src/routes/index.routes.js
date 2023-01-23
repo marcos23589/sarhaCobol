@@ -7,11 +7,13 @@ const xlsx = require("xlsx");
 const fs = require('fs')
 const liquidacion = require("../models/Liquidacion")
 
+// FUNCIONES IMPORTADAS DEL PAGES.CONTROLLER
 const {
     home,
     getLiquidacion,
     getPreconceptos,
-    postPreconceptos
+    postPreconceptos,
+    getEsidif
 } = require("../controllers/pages.controller");
 
 //SE CREA EL DIRECTORIO DONDE SE GUARDAN 
@@ -47,8 +49,9 @@ router.get('/', home)
 router.get('/preconceptos', getPreconceptos)
 router.post('/preconceptos', postPreconceptos)
 router.get('/liquidacion', getLiquidacion)
+router.get('/esidif', getEsidif)
 
-//CUANDO SE CARGA LA LIQUIDACION
+/********* CUANDO SE CARGA LA LIQUIDACION *************/
 router.post('/liquidacion', async (req, res) => {
 
   //SE LIMPIA LA BBDD
@@ -61,14 +64,7 @@ router.post('/liquidacion', async (req, res) => {
     30707677879, 30673656524,
   ];
 
-  //LEVANTA EL EXCEL GUARDADO PARA OBTENER LOS DATOS
-  let excelToJson = xlsx.readFile(`${destino}/${nombre}`);
-
-  //SE CREA UNA VARIABLE QUE GUARDA UN JSON CON LOS NOMBRES DE LAS PESTAÑAS
-  let nombreHoja = excelToJson.SheetNames;
-
-  //SE CREA UNA VARIABLE PARA GUARDAR UN JSON CON LOS DATOS DE LA PESTAÑA 1
-  let datos = xlsx.utils.sheet_to_json(excelToJson.Sheets[nombreHoja[0]]);
+  let datos = excel()
   
   for (let i = 0; i < datos.length; i++) {
 
@@ -78,11 +74,10 @@ router.post('/liquidacion', async (req, res) => {
       jDatos.push({
         CUIT, CUIL, CODIGO, IMPORTE        
       });
-    }    
+    }
   }
 
-
-
+  let count = 0
   //SE GUARDA LA LIQUIDACION EN LA BBDD
   jDatos.forEach(element => {
     try {
@@ -90,9 +85,10 @@ router.post('/liquidacion', async (req, res) => {
    } catch (error) {
      console.log(error)
    }
+   count++
   });
 
-  console.log("DOCUMENTOS INGRESADOS ->", liquidacion.length)
+  console.log("DOCUMENTOS INGRESADOS ->", count)
 
   //SE BORRA EL ARCHIVO EXCEL SUBIDO
   try {
@@ -101,10 +97,32 @@ router.post('/liquidacion', async (req, res) => {
   } catch (error) {
     console.error('Algo pasó borrando el archivo! ->', error)
   }
-  
-  
   return res.redirect("preconceptos")
 })
+
+/********* CUANDO SE CARGA LA OTRO EXCEL *************/
+
+router.post('/esidif', async(req, res) => {  
+  let datos = excel()
+
+  //SE OBTIENE UN OBJETO
+  console.log(datos)
+  return res.redirect('esidif')
+})
+
+
+/********* FUNCION MANEJADORA DE LOS EXCEL *************/
+function excel(){
+
+  //SE LEVANTA EL EXCEL
+  let excelToJson = xlsx.readFile(`${destino}/${nombre}`);
+
+  //SE CREA UNA VARIABLE QUE GUARDA UN JSON CON LOS NOMBRES DE LAS PESTAÑAS
+  let nombreHoja = excelToJson.SheetNames;
+
+  //SE CREA UNA VARIABLE PARA GUARDAR UN JSON CON LOS DATOS DE LA PESTAÑA 1
+  return xlsx.utils.sheet_to_json(excelToJson.Sheets[nombreHoja[0]]);
+}
   
 module.exports = router
 

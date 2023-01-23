@@ -12,6 +12,10 @@ exports.getLiquidacion =   (req, res) => {
     return res.render("liquidacion", {titulo: "Liquidacion"})
 }
 
+exports.getEsidif = (req, res) => {
+ return res.render('esidif', {titulo: "e-SIDIF"})                                                                                                                                         
+}
+
 exports.getPreconceptos = async (req, res) => {
 
     //se obtiene la cantidad de registros (liq. vertical)

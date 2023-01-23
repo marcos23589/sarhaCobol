@@ -1,1 +1,3 @@
 node_modules/*
+src/files/salidas-txt/*
+src/files/upload/*
