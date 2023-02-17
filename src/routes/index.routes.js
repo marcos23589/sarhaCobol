@@ -7,6 +7,8 @@ const xlsx = require("xlsx");
 const fs = require('fs')
 const liquidacion = require("../models/Liquidacion")
 
+let count = 0
+
 // FUNCIONES IMPORTADAS DEL PAGES.CONTROLLER
 const {
     home,
@@ -66,26 +68,32 @@ router.post('/liquidacion', async (req, res) => {
 
   let datos = excel()
   
+
   for (let i = 0; i < datos.length; i++) {
 
     //SE FILTRA EL JSON DE ACUERDO AL CUIT DE LOS ANEXOS
     if (cuits.includes(datos[i].CUIT)) {
         const {CUIT, CUIL, CODIGO, IMPORTE } = datos[i]
+        count++ 
       jDatos.push({
-        CUIT, CUIL, CODIGO, IMPORTE        
+        CUIT, CUIL, CODIGO, IMPORTE   
+            
       });
+      
     }
+
+    
   }
 
-  let count = 0
+  
   //SE GUARDA LA LIQUIDACION EN LA BBDD
   jDatos.forEach(element => {
     try {
      liquidacion.insertMany(element)
+     
    } catch (error) {
      console.log(error)
-   }
-   count++
+   }   
   });
 
   console.log("DOCUMENTOS INGRESADOS ->", count)
