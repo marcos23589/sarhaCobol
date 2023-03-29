@@ -58,7 +58,8 @@ exports.postPreconceptos = async (req, res) => {
         
         if(aux){            
           //redondea al entero más cercano
-          cantidad = Math.round(importe / (aux.MONTO*100));                           
+          cantidad = Math.round(importe / (aux.MONTO*100));
+                                   
         }
         
         //FILTRO PARA CREAR LOS ARCHIVOS

@@ -41,8 +41,8 @@ const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
 
     //COMENTAR O DESCOMENTAR LAS FECHAS 
     //EN CASO DE SER NECESARIO
-    desde = 31012023
-    hasta = 31012023
+    desde = 31032023
+    hasta = 31032023
   }
   
   //SE CREA UN STRING QUE LUEGO SE ESCRIBE EN EL ARCHIVO
