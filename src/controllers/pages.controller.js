@@ -2,7 +2,7 @@ const Concepto = require('../models/conceptos')
 const liquidacion = require('../models/Liquidacion')
 const filtro = require('../helpers/conceptos')
 const Asignaciones = require('../models/Asignaciones')
-const sumaCodigos = require('../helpers/filtros')
+const {sumaCodigos} = require('../helpers/filtros')
 
 exports.home = (req, res) => {
     return res.render("home", {titulo: "Sarha-Cobol"})

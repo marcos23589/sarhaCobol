@@ -1,10 +1,15 @@
 const path = require("path");
-const fs = require('fs')
+const fs = require("fs");
 const { fechaDesde, fechaHasta, periodoDesde } = require("../helpers/fecha");
 const salidasTxt = path.join(__dirname, "../files/salidas-txt");
+const {
+  codAfiliaciones,
+  codDescuentos,
+  reintegros,
+} = require("../helpers/filtros");
 
-let desde = fechaDesde
-let hasta = fechaHasta
+let desde = fechaDesde;
+let hasta = fechaHasta;
 
 //SE CREA EL DIRECTORIO DONDE SE GUARDAN LAS SALIDAS
 fs.mkdir(salidasTxt, { recursive: true }, (err) => {
@@ -12,55 +17,61 @@ fs.mkdir(salidasTxt, { recursive: true }, (err) => {
 });
 
 const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
-  
-  let reintegro = "";
+  console.log("importe ", importe);
+  let afiliaciones = codAfiliaciones(CODIGO, importe / 100);
+
+  let { cod_institucion, cod_descuento } = codDescuentos(CODIGO);
 
   //SE DEFINEN LOS REINTEGROS PARA LOS VALORES DE IMPORTE
-  switch (CODIGO) {
-    case 851: if(subsarha == 1 || subsarha == 2){reintegro = "8"}
-      break;
-    case 852: if(subsarha == 1 || subsarha == 2 || subsarha == 3) 
-                  {reintegro = "8"} 
-                  else if(subsarha == 4){reintegro = "9"}
-      break;
-    case 855: if(subsarha == 1){reintegro = "9"}
-      break;
-    case 320: if(subsarha == 2 || subsarha == 3){reintegro = "8"}
-      break;
-    default:
-        reintegro = "1";
-      break;
-  }  
 
+  let reintegro = reintegros(CODIGO);
   //Si cantidad == -1, NO ES ASIGNACION
   if (cantidad == -1) {
     cantidad = 1;
   } else {
-    //EN CASO DE ASIGNACION, NO VA IMPORTE    
+    //EN CASO DE ASIGNACION, NO VA IMPORTE
     importe = 0;
 
-    //COMENTAR O DESCOMENTAR LAS FECHAS 
+    //COMENTAR O DESCOMENTAR LAS FECHAS
     //EN CASO DE SER NECESARIO
-    desde = 31032023
-    hasta = 31032023
+    /* desde = 31032023
+    hasta = 31032023 */
   }
-  
+
   //SE CREA UN STRING QUE LUEGO SE ESCRIBE EN EL ARCHIVO
   let stringSalida = "";
+
+  /* cuil + */
+  if (afiliaciones != -1) {
     stringSalida +=
-    cuil +
-
+      "1" +
+      cuil.toString() +
+      fechaDesde +
+      afiliaciones.toString().padStart(8, "0") +
+      "0000000000";
+  } else if (cod_institucion) {
+    stringSalida +=
+      cuil.toString() +
+      cod_institucion.padStart(6, "0") +
+      cod_descuento.padStart(4, "0") +
+      (importe / 100).toString().padStart(11, "0") +
+      periodoDesde.toString() +
+      periodoDesde.toString();
+  } else {
     //RELLENA LOS CAMPOS AL PRINCIPIO
-    CODIGO.toString().padStart(4, "0") +
-    subsarha.toString().padStart(4, "0") +
-    desde +
-    periodoDesde +
-    reintegro +
-    hasta +
-    cantidad.toString().padStart(8, "0").padEnd(14, "0") +
-    importe.toString().padStart(12, "0");
+    stringSalida +=
+      cuil.toString() +
+      CODIGO.toString().padStart(4, "0") +
+      subsarha.toString().padStart(4, "0") +
+      desde +
+      periodoDesde +
+      reintegro +
+      hasta +
+      cantidad.toString().padStart(8, "0").padEnd(14, "0") +
+      importe.toString().padStart(12, "0");
+  }
 
-  //SE AGREGA UN RETORNO DE CARRO AL FINAL DEL STRING, 
+  //SE AGREGA UN RETORNO DE CARRO AL FINAL DEL STRING,
   //PARA QUE LA PRÓXIMA LÍNEA SE ESCRIBA DEBAJO DE ÉSTA
   stringSalida += "\n";
 
@@ -77,4 +88,4 @@ const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
   );
 };
 
-module.exports = filtro
+module.exports = filtro;

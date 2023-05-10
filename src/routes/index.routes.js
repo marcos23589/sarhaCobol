@@ -1,24 +1,24 @@
 const { Router } = require("express");
-const router = Router()
-const path = require('path')
+const router = Router();
+const path = require("path");
 const destino = path.join(__dirname, "../files/upload");
 const multer = require("multer");
 const xlsx = require("xlsx");
-const fs = require('fs')
-const liquidacion = require("../models/Liquidacion")
+const fs = require("fs");
+const liquidacion = require("../models/Liquidacion");
 
-let count = 0
+let count = 0;
 
 // FUNCIONES IMPORTADAS DEL PAGES.CONTROLLER
 const {
-    home,
-    getLiquidacion,
-    getPreconceptos,
-    postPreconceptos,
-    getEsidif
+  home,
+  getLiquidacion,
+  getPreconceptos,
+  postPreconceptos,
+  getEsidif,
 } = require("../controllers/pages.controller");
 
-//SE CREA EL DIRECTORIO DONDE SE GUARDAN 
+//SE CREA EL DIRECTORIO DONDE SE GUARDAN
 //LAS PLANILLAS DE MANERA TEMPORAL
 fs.mkdir(destino, { recursive: true }, (err) => {
   if (err) throw err;
@@ -28,100 +28,94 @@ let nombre = "";
 let tiempo = Date.now();
 const jDatos = [];
 
-// SE SUBE EL ARCHIVO EXCEL 
+// SE SUBE EL ARCHIVO EXCEL
 // Y SE LE DA UN NOMBRE ALEATORIO
 const guardado = multer.diskStorage({
-    filename: (req, file, cb) => {
-      nombre = tiempo + "-" + file.originalname;
-      cb(null, nombre);
-    },
-    destination: destino,
-  });
+  filename: (req, file, cb) => {
+    nombre = tiempo + "-" + file.originalname;
+    cb(null, nombre);
+  },
+  destination: destino,
+});
 
 //LUGAR DONDE SE GUARDA EL ARCHIVO EXCEL TEMPORAL
 router.use(
-    multer({
-      storage: guardado,
-      dest: destino,
-    }).array("archivo")
-  );  
+  multer({
+    storage: guardado,
+    dest: destino,
+  }).array("archivo")
+);
 
 // RUTAS
-router.get('/', home)
-router.get('/preconceptos', getPreconceptos)
-router.post('/preconceptos', postPreconceptos)
-router.get('/liquidacion', getLiquidacion)
-router.get('/esidif', getEsidif)
+router.get("/", home);
+router.get("/preconceptos", getPreconceptos);
+router.post("/preconceptos", postPreconceptos);
+router.get("/liquidacion", getLiquidacion);
+router.get("/esidif", getEsidif);
 
 /********* CUANDO SE CARGA LA LIQUIDACION *************/
-router.post('/liquidacion', async (req, res) => {
-
+router.post("/liquidacion", async (req, res) => {
   //SE LIMPIA LA BBDD
-  await liquidacion.deleteMany()
+  await liquidacion.deleteMany();
 
   //FILTRO CON LOS CUIT DE LOS ANEXOS QUE ESTÁN CARGADOS EN SARHA
-  const cuits = [
+  /* const cuits = [
     30710660839, 30716837250, 30711853738, 30716110326, 33716718439,
     30715443577, 30673656699, 30673639603, 30656949836, 30673657687,
     30707677879, 30673656524,
-  ];
+  ]; */
 
-  let datos = excel()
-  
+  const cuits = [30717532879, 30717665704, 30656997806];
+
+  let datos = excel();
 
   for (let i = 0; i < datos.length; i++) {
-
     //SE FILTRA EL JSON DE ACUERDO AL CUIT DE LOS ANEXOS
     if (cuits.includes(datos[i].CUIT)) {
-        const {CUIT, CUIL, CODIGO, IMPORTE } = datos[i]
-        count++ 
+      const { CUIT, CUIL, CODIGO, IMPORTE } = datos[i];
+      count++;
       jDatos.push({
-        CUIT, CUIL, CODIGO, IMPORTE   
-            
+        CUIT,
+        CUIL,
+        CODIGO,
+        IMPORTE,
       });
-      
     }
-
-    
   }
 
-  
   //SE GUARDA LA LIQUIDACION EN LA BBDD
-  jDatos.forEach(element => {
+  jDatos.forEach((element) => {
     try {
-     liquidacion.insertMany(element)
-     
-   } catch (error) {
-     console.log(error)
-   }   
+      liquidacion.insertMany(element);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
-  console.log("DOCUMENTOS INGRESADOS ->", count)
+  console.log("DOCUMENTOS INGRESADOS ->", count);
 
   //SE BORRA EL ARCHIVO EXCEL SUBIDO
   try {
-    fs.unlinkSync(`${destino}/${nombre}`)
-    console.log('Archivo excel guardado en BBDD!')
+    fs.unlinkSync(`${destino}/${nombre}`);
+    console.log("Archivo excel guardado en BBDD!");
   } catch (error) {
-    console.error('Algo pasó borrando el archivo! ->', error)
+    console.error("Algo pasó borrando el archivo! ->", error);
   }
-  return res.redirect("preconceptos")
-})
+  return res.redirect("preconceptos");
+});
 
 /********* CUANDO SE CARGA LA OTRO EXCEL *************/
 
-router.post('/esidif', async(req, res) => {  
-  let datos = excel()
+router.post("/esidif", async (req, res) => {
+  let datos = excel();
 
   //SE OBTIENE UN OBJETO
-  console.log(datos)
-  return res.redirect('esidif')
-})
-
+  console.log(datos);
+  return res.redirect("esidif");
+});
 
 /********* FUNCION MANEJADORA DE LOS EXCEL *************/
-function excel(){
-
+function excel() {
   //SE LEVANTA EL EXCEL
   let excelToJson = xlsx.readFile(`${destino}/${nombre}`);
 
@@ -131,8 +125,5 @@ function excel(){
   //SE CREA UNA VARIABLE PARA GUARDAR UN JSON CON LOS DATOS DE LA PESTAÑA 1
   return xlsx.utils.sheet_to_json(excelToJson.Sheets[nombreHoja[0]]);
 }
-  
-module.exports = router
 
-
-
+module.exports = router;

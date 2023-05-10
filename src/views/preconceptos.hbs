@@ -1,13 +1,13 @@
 <form action="/preconceptos" method="post" id="formElement">
   <div class="container-fluid-sm p-5">
     <div class="row align-items-start">
-      <h4>Selecciona los ítems para obtener los archivos de preconceptos (sobre {{cantidad}} registros)</h4>
+      <h4>Selecciona los ítems para obtener los archivos (sobre {{cantidad}} registros)</h4>
       <div class="col">
         <div class="card">
           <div class="card-body">
             {{#each res1}}
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol" >
+              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol">
               <label class="form-check-label" for="{{cobol}}">
                 {{sarha}} ({{cobol}}) - {{denominacion}}
               </label>
@@ -21,7 +21,7 @@
           <div class="card-body">
             {{#each res2}}
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol" >
+              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol">
               <label class="form-check-label" for="{{cobol}}">
                 {{sarha}} ({{cobol}}) - {{denominacion}}
               </label>
@@ -35,7 +35,7 @@
           <div class="card-body">
             {{#each res3}}
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol" >
+              <input class="form-check-input" type="checkbox" value={{cobol}} id="cobol" name="cobol">
               <label class="form-check-label" for="{{cobol}}">
                 {{sarha}} ({{cobol}}) - {{denominacion}}
               </label>
