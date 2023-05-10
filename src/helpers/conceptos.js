@@ -17,14 +17,13 @@ fs.mkdir(salidasTxt, { recursive: true }, (err) => {
 });
 
 const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
-  console.log("importe ", importe);
   let afiliaciones = codAfiliaciones(CODIGO, importe / 100);
 
   let { cod_institucion, cod_descuento } = codDescuentos(CODIGO);
 
   //SE DEFINEN LOS REINTEGROS PARA LOS VALORES DE IMPORTE
-
   let reintegro = reintegros(CODIGO);
+
   //Si cantidad == -1, NO ES ASIGNACION
   if (cantidad == -1) {
     cantidad = 1;
