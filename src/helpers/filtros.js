@@ -27,93 +27,55 @@ function sumaCuil(arreglo) {
 }
 
 function codAfiliaciones(cod, importe) {
-  const afiliacion = [
-    488, 485, 356, 354, 352, 353, 355, 494, 497, 468, 471, 477, 464, 459, 443,
-  ];
-  const interfaz = [
-    299, 300, 380, 381, 383, 384, 385, 411, 413, 414, 415, 417, 419, 420, 424,
-  ];
-  if (cod == 474) {
+  const afiliacion = {
+    488: 299,
+    485: 300,
+    355: 385,
+    494: 411,
+    497: 413,
+    468: 414,
+    471: 415,
+    477: 417,
+    464: 419,
+    459: 420,
+    443: 424,
+  };
+
+  if (cod === 474) {
     return mpcss(importe);
-  } else if (afiliacion.includes(cod)) {
-    let i = afiliacion.indexOf(cod);
-    return interfaz[i];
-  } else return -1;
+  } else {
+    return afiliacion[cod] || -1;
+  }
 }
 
-function codDescuentos(cod) {
-  let descuento = {};
-  const descuentos = [441, 440, 442, 444, 448, 449, 452, 447, 445];
 
-  if (descuentos.includes(cod)) {
-    switch (cod) {
-      case 441:
-        descuento.cod_institucion = "421";
-        descuento.cod_descuento = "14";
-        break;
-      case 444:
-        descuento.cod_institucion = "411";
-        descuento.cod_descuento = "14";
-        break;
-      case 445:
-        descuento.cod_institucion = "416";
-        descuento.cod_descuento = "189";
-        break;
-      case 448:
-        descuento.cod_institucion = "343";
-        descuento.cod_descuento = "14";
-        break;
-      case 440:
-        descuento.cod_institucion = "417";
-        descuento.cod_descuento = "189";
-        break;
-      case 442:
-        descuento.cod_institucion = "423";
-        descuento.cod_descuento = "162";
-        break;
-      case 447:
-        descuento.cod_institucion = "425";
-        descuento.cod_descuento = "189";
-        break;
-      case 449:
-        descuento.cod_institucion = "426";
-        descuento.cod_descuento = "14";
-        break;
-      case 451:
-        descuento.cod_institucion = "427";
-        descuento.cod_descuento = "217";
-        break;
-      case 452:
-        descuento.cod_institucion = "428";
-        descuento.cod_descuento = "211";
-        break;
-      default:
-        break;
-    }
-  }
-  return descuento;
+function codDescuentos(cod) {
+  const descuentos = {
+    441: {cod_institucion: "421", cod_descuento: "14"},
+    440: {cod_institucion: "417", cod_descuento: "189"},
+    442: {cod_institucion: "423", cod_descuento: "162"},
+    444: {cod_institucion: "411", cod_descuento: "14"},
+    445: {cod_institucion: "416", cod_descuento: "189"},
+    447: {cod_institucion: "425", cod_descuento: "189"},
+    448: {cod_institucion: "343", cod_descuento: "14"},
+    449: {cod_institucion: "426", cod_descuento: "14"},
+    451: {cod_institucion: "427", cod_descuento: "217"},
+    452: {cod_institucion: "428", cod_descuento: "211"}
+  };
+  
+  return descuentos[cod] || {};
 }
 
 function mpcss(importe) {
-  let cod;
-  switch (importe) {
-    case 4000:
-      cod = 416;
-      break;
-    case 6000:
-      cod = 429;
-      break;
-    case 500:
-      cod = 430;
-      break;
-    default:
-      cod = -1;
-      break;
-  }
-  return cod;
+  const codigos = {
+    4000: 416,
+    6000: 429,
+    500: 430
+  };
+  return codigos[importe] || -1;
 }
 
-function reintegros(cod){
+function reintegros(cod, subsarha){
   let reintegro
   switch (cod) {
     case 851:

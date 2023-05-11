@@ -7,6 +7,7 @@ const {
   codDescuentos,
   reintegros,
 } = require("../helpers/filtros");
+const generarStringSalida = require("./salidas");
 
 let desde = fechaDesde;
 let hasta = fechaHasta;
@@ -22,7 +23,7 @@ const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
   let { cod_institucion, cod_descuento } = codDescuentos(CODIGO);
 
   //SE DEFINEN LOS REINTEGROS PARA LOS VALORES DE IMPORTE
-  let reintegro = reintegros(CODIGO);
+  let reintegro = reintegros(CODIGO, subsarha);
 
   //Si cantidad == -1, NO ES ASIGNACION
   if (cantidad == -1) {
@@ -38,37 +39,21 @@ const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
   }
 
   //SE CREA UN STRING QUE LUEGO SE ESCRIBE EN EL ARCHIVO
-  let stringSalida = "";
-
-  /* cuil + */
-  if (afiliaciones != -1) {
-    stringSalida +=
-      "1" +
-      cuil.toString() +
-      fechaDesde +
-      afiliaciones.toString().padStart(8, "0") +
-      "0000000000";
-  } else if (cod_institucion) {
-    stringSalida +=
-      cuil.toString() +
-      cod_institucion.padStart(6, "0") +
-      cod_descuento.padStart(4, "0") +
-      (importe / 100).toString().padStart(11, "0") +
-      periodoDesde.toString() +
-      periodoDesde.toString();
-  } else {
-    //RELLENA LOS CAMPOS AL PRINCIPIO
-    stringSalida +=
-      cuil.toString() +
-      CODIGO.toString().padStart(4, "0") +
-      subsarha.toString().padStart(4, "0") +
-      desde +
-      periodoDesde +
-      reintegro +
-      hasta +
-      cantidad.toString().padStart(8, "0").padEnd(14, "0") +
-      importe.toString().padStart(12, "0");
-  }
+  let stringSalida = generarStringSalida(
+    cuil,
+    CODIGO,
+    subsarha,
+    desde,
+    periodoDesde,
+    reintegro,
+    hasta,
+    cantidad,
+    importe,
+    afiliaciones,
+    cod_institucion,
+    cod_descuento,
+    fechaDesde
+  );
 
   //SE AGREGA UN RETORNO DE CARRO AL FINAL DEL STRING,
   //PARA QUE LA PRÓXIMA LÍNEA SE ESCRIBA DEBAJO DE ÉSTA
@@ -76,15 +61,17 @@ const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
 
   //CREA EL ARCHIVO Y LO VA ACTUALIZANDO
   //SI EXISTE, LO SOBREESCRIBE!
-  fs.appendFile(
-    `${salidasTxt}/${CODIGO}-${denominacion}.txt`,
-    stringSalida,
-    (err) => {
-      if (err) {
-        throw err;
-      }
+
+  const filename = `${CODIGO}-${denominacion}.txt`;
+  const filepath = path.join(salidasTxt, filename);
+
+  fs.appendFile(filepath, stringSalida, (err) => {
+    if (err) {
+      console.error(`Error al escribir en el archivo ${filename}: ${err}`);
+    } else {
+      console.log(`Datos escritos correctamente en ${filename}`);
     }
-  );
+  });
 };
 
 module.exports = filtro;
