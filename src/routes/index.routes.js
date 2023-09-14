@@ -7,8 +7,6 @@ const xlsx = require("xlsx");
 const fs = require("fs");
 const liquidacion = require("../models/Liquidacion");
 
-let count = 0;
-
 // FUNCIONES IMPORTADAS DEL PAGES.CONTROLLER
 const {
   home,
@@ -17,6 +15,8 @@ const {
   postPreconceptos,
   getEsidif,
 } = require("../controllers/pages.controller");
+
+let count = 0;
 
 //SE CREA EL DIRECTORIO DONDE SE GUARDAN
 //LAS PLANILLAS DE MANERA TEMPORAL
@@ -61,8 +61,11 @@ router.post("/liquidacion", async (req, res) => {
   //FILTRO CON LOS CUIT DE LOS ANEXOS QUE ESTÁN CARGADOS EN SARHA
 
   const cuits = [
-    30717532879, //CITEC
-    30717665704, //IGUALDAD
+    30715322745, //FISCALIA
+    30673674433, //TRIB DE CUENTAS
+    30652487080, //UNEPOSC
+    //30717532879, //CITEC
+    //30717665704, //IGUALDAD
     // 30710660839, //MIN PRODUCCION
     // 30716837250, //JEF GABINETE
     // 30711853738, //DESARROLLO
