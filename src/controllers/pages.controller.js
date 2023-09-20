@@ -50,12 +50,15 @@ exports.postPreconceptos = async (req, res) => {
   for (let i = 0; i < archivo.length; i++) {
     let importe = Math.ceil(archivo[i].IMPORTE * 100);
     let auxSarha = await Concepto.find({ cobol: archivo[i].CODIGO });
+    console.log("CODIGO -> ", auxSarha);
     let cantidad = -1;
     let aux = await Asignaciones.findOne({ SARHA: auxSarha[0].sarha });
     if (aux) {
       //redondea al entero más cercano
       cantidad = Math.round(importe / (aux.MONTO * 100));
     }
+
+    
 
     //FILTRO PARA CREAR LOS ARCHIVOS
     filtro(

@@ -38,6 +38,27 @@ const filtro = (CODIGO, importe, cuil, cantidad, denominacion, subsarha) => {
     hasta = 31032023 */
   }
 
+  switch (importe) {
+    case 420200:
+      afiliaciones = 380;
+      break;
+    case 390000:
+      afiliaciones = 381;
+      break;
+    case 39750:
+      afiliaciones = 383;
+      break;
+    case 4875:
+      afiliaciones = 384;
+      break;
+    case 810200:
+      afiliaciones = 999; // SE LO DEBE DIVIDIR , TIENE TITULAR (380) Y CONYUGUE (381)!!!!
+      break;
+    default:
+      afiliaciones = 380;
+      break;
+  }
+
   //SE CREA UN STRING QUE LUEGO SE ESCRIBE EN EL ARCHIVO
   let stringSalida = generarStringSalida(
     cuil,
